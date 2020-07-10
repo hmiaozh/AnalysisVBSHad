@@ -12,7 +12,7 @@
 #include <TSystem.h>
 
 
-void MVAVBSHad(
+void VBSHad(
   TString inputFileName, 
   TString extraString="" 
 ) {
@@ -27,7 +27,7 @@ void MVAVBSHad(
   TTree *mvaTree = (TTree*)inputFile->Get("tree_vbs");
   
   // Initialize the factory
-  TString trainName="BDT_VBSHad";
+  TString trainName="BDT_VBSHad_Multi";
   output_file=TFile::Open(trainName+".root", "RECREATE");
   factory = new TMVA::Factory("TMVAMulticlass", output_file, "!V:!Silent:Color:DrawProgressBar:AnalysisType=Multiclass");
   //factory = new TMVA::Factory("bdt", output_file, "!V:!Silent:DrawProgressBar:AnalysisType=Classification");
@@ -37,16 +37,16 @@ void MVAVBSHad(
   
   dataloader->AddTree(mvaTree, "ZZ", 1.0, "ana_category == 3 && mc == 3 && evt % 3 != 0", "train");
   dataloader->AddTree(mvaTree, "ewkWZ", 1.0, "ana_category == 3 && mc == 4 && evt % 3 != 0", "train");
-  dataloader->AddTree(mvaTree, "qcdWZ", 1.0, "ana_category == 3 && mc == 5 && evt % 3 != 0", "train");
-  dataloader->AddTree(mvaTree, "others", 1.0, "ana_category == 3 && mc > 50 && evt % 3 != 0", "train");
+  //dataloader->AddTree(mvaTree, "qcdWZ", 1.0, "ana_category == 3 && mc == 5 && evt % 3 != 0", "train");
+  dataloader->AddTree(mvaTree, "others", 1.0, "ana_category == 3 && (mc == 5 || mc > 50) && evt % 3 != 0", "train");
   dataloader->AddTree(mvaTree, "ZZ", 1.0, "ana_category == 3 && mc == 3 && evt % 3 == 0", "test");
   dataloader->AddTree(mvaTree, "ewkWZ", 1.0, "ana_category == 3 && mc == 4 && evt % 3 == 0", "test");
-  dataloader->AddTree(mvaTree, "qcdWZ", 1.0, "ana_category == 3 && mc == 5 && evt % 3 == 0", "test");
-  dataloader->AddTree(mvaTree, "others", 1.0, "ana_category == 3 && mc > 50 && evt % 3 == 0", "test");
+  //dataloader->AddTree(mvaTree, "qcdWZ", 1.0, "ana_category == 3 && mc == 5 && evt % 3 == 0", "test");
+  dataloader->AddTree(mvaTree, "others", 1.0, "ana_category == 3 && (mc == 5 || mc > 50) && evt % 3 == 0", "test");
 
   dataloader->SetWeightExpression("abs(weight)", "ZZ");
   dataloader->SetWeightExpression("abs(weight)", "ewkWZ");
-  dataloader->SetWeightExpression("abs(weight)", "qcdWZ");
+  //dataloader->SetWeightExpression("abs(weight)", "qcdWZ");
   dataloader->SetWeightExpression("abs(weight)", "others");
   
 
@@ -64,15 +64,15 @@ void MVAVBSHad(
 
   dataloader->AddVariable("varMjj"    ,"varMjj"    , "", 'F');
   dataloader->AddVariable("varDetajj"    ,"varDetajj"    , "", 'F');
-  dataloader->AddVariable("varDphijj"    ,"varDphijj"    , "", 'F');
-  dataloader->AddVariable("varJet2Eta"    ,"varJet2Eta"    , "", 'F');
+  //dataloader->AddVariable("varDphijj"    ,"varDphijj"    , "", 'F');
+  //dataloader->AddVariable("varJet2Eta"    ,"varJet2Eta"    , "", 'F');
   dataloader->AddVariable("varJet2Pt"    ,"varJet2Pt"    , "", 'F');
-  dataloader->AddVariable("j1Unc"    ,"j1Unc"    , "", 'F');
-  dataloader->AddVariable("j2Unc"    ,"j2Unc"    , "", 'F');
+  //dataloader->AddVariable("j1Unc"    ,"j1Unc"    , "", 'F');
+  //dataloader->AddVariable("j2Unc"    ,"j2Unc"    , "", 'F');
   dataloader->AddVariable("varMVV"    ,"varMVV"    , "", 'F');
   dataloader->AddVariable("varPTVV"    ,"varPTVV"    , "", 'F');
-  dataloader->AddVariable("varPTV1"    ,"varPTV1"    , "", 'F');
-  dataloader->AddVariable("varPTV2"    ,"varPTV2"    , "", 'F');
+  //dataloader->AddVariable("varPTV1"    ,"varPTV1"    , "", 'F');
+  //dataloader->AddVariable("varPTV2"    ,"varPTV2"    , "", 'F');
   //dataloader->AddVariable("varDetaVV"    ,"varDetaVV"    , "", 'F');
   //dataloader->AddVariable("varPetaVV"    ,"varPetaVV"    , "", 'F');
   //dataloader->AddVariable("varEtaMinV"    ,"varEtaMinV"    , "", 'F');
@@ -80,7 +80,7 @@ void MVAVBSHad(
   //dataloader->AddVariable("varCen"    ,"varCen"    , "", 'F');
   dataloader->AddVariable("varzepVB"    ,"varzepVB"    , "", 'F');
   //dataloader->AddVariable("varzepVV"    ,"varzepVV"    , "", 'F');
-  dataloader->AddVariable("varDRVj"    ,"varDRVj"    , "", 'F');
+  //dataloader->AddVariable("varDRVj"    ,"varDRVj"    , "", 'F');
   dataloader->AddVariable("varnormPTVVjj"    ,"varnormPTVVjj"    , "", 'F');
   //dataloader->AddVariable("varFW2j"    ,"varnormFW2j"    , "", 'F');
  
