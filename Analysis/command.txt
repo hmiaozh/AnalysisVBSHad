@@ -1,0 +1,14 @@
+1.produce datacards->text2workspace->significance/postfitplots:
+-combine all cate+region expected: ./exprun2comb.sh 2021 2 exp DatacarddirectoryName
+-combine all cate+region observed: ./exprun2comb.sh 2021 2 obs DatacarddirectoryName (current config observed only run on CRs)
+-for a single cate/region (for check, not frequently used):
+	produce dc:	python script/bwsVBSHad.py -c "$cat" -s "$var" -i "UL2021/BHAD/BHAD.root" -y 2021 -q 2 -r $region
+	t2w:		text2workspace.py -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel --PO verbose --PO 'map=.*/VVEWK:r_s0[1,0,5]' DatacardsName -o output.root
+	significance:	combine output.root -M Significance -n significance_output --setParameters r_s0=1 -t -1
+
+
+2. uncertainty table
+python prefit_impact.py   (change datacard name in line 15)
+
+3. pulls/impacts
+./runimpactsVBS.sh datacardName category region (e.g. ./runimpactsVBS.sh Datacard/NanoV9/output.root BB anti)
