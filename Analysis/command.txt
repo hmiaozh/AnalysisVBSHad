@@ -12,3 +12,6 @@ python prefit_impact.py   (change datacard name in line 15)
 
 3. pulls/impacts
 ./runimpactsVBS.sh datacardName category region (e.g. ./runimpactsVBS.sh Datacard/NanoV9/output.root BB anti)
+
+4. run postfit
+root -l -q -b postfitBB.C+'("BB","BDTnoBnoMET","comb")'
