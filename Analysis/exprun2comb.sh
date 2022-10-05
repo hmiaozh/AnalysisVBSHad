@@ -68,9 +68,10 @@ combineCards.py cms_vbshad_$year\_$quote\_BDTwithMET_RMET_SR.txt cms_vbshad_$yea
 #combineCards.py cms_vbshad_$year\_$quote\_$var\_$cat\_SR.txt  > cms_vbshad_$year\_$quote\_$var\_$cat\_all.txt
 
 ### comb all cate ###
-### exp all ###
+### exp/obs all ###
 combineCards.py cms_vbshad_$year\_$quote\_BDTnoBnoMET_BB_all.txt cms_vbshad_$year\_$quote\_BDTwithMET_BMET_all.txt cms_vbshad_$year\_$quote\_BDTwithMET_RMET_all.txt cms_vbshad_$year\_$quote\_BDTbtag_BBtag_all.txt > cms_vbshad_$year\_$quote\_DNN_comb_all.txt
-### unb CR comb
+
+### CR only comb ###
 combineCards.py cms_vbshad_$year\_$quote\_BDTnoBnoMET_BB_side.txt cms_vbshad_$year\_$quote\_BDTnoBnoMET_BB_anti.txt cms_vbshad_$year\_$quote\_BDTwithMET_BMET_side.txt cms_vbshad_$year\_$quote\_BDTwithMET_RMET_side.txt cms_vbshad_$year\_$quote\_BDTbtag_BBtag_side.txt cms_vbshad_$year\_$quote\_BDTbtag_BBtag_anti.txt > cms_vbshad_$year\_$quote\_DNN_comb_CR.txt
 
 cd ../..
@@ -107,6 +108,7 @@ echo "significance"
 #combine $carddir/workspace_$year\_$var\_$cat\_anti_VVEWK.root -M Significance -n $cat\_significance_$var\_anti_VVEWK
 
 
+
 if [ "$fitr" = "exp" ]; then 
 	### comb region ###
 	echo "BB"
@@ -121,6 +123,20 @@ if [ "$fitr" = "exp" ]; then
 	### comb region+cate ####
 	echo "comb"
 	combine $carddir/workspace_$year\_DNN_comb_all_VVEWK.root -M Significance -n comb_significance_DNN_all_VVEWK --setParameters r_s0=1 -t -1
+elif [ "$fitr" = "obs" ]; then
+	echo "combined results observed"
+        echo "BB"
+	combine $carddir/workspace_$year\_BDTnoBnoMET_BB_all_VVEWK.root -M Significance -n BB_significance_DNN_all_VVEWK
+        echo "BBtag"
+	combine $carddir/workspace_$year\_BDTbtag_BBtag_all_VVEWK.root -M Significance -n BBtag_significance_DNN_all_VVEWK
+        echo "BMET"
+        combine $carddir/workspace_$year\_BDTwithMET_BMET_all_VVEWK.root -M Significance -n BMET_significance_DNN_all_VVEWK
+        echo "RMET"
+        combine $carddir/workspace_$year\_BDTwithMET_RMET_all_VVEWK.root -M Significance -n RMET_significance_DNN_all_VVEWK
+
+        ### comb region+cate ####
+        echo "comb"
+        combine $carddir/workspace_$year\_DNN_comb_all_VVEWK.root -M Significance -n comb_significance_DNN_all_VVEWK
 else
 	echo "run unb CR postfit later"
 	### unb CR comb
@@ -135,8 +151,10 @@ fi;
 echo "FitDiagnostics"
 if [ "$fitr" = "exp" ]; then
 	combine -M FitDiagnostics -t -1 $carddir/workspace_$year\_DNN_comb_all_VVEWK.root --robustFit=1  --X-rtd MINIMIZER_analytic --saveShapes --saveWithUncertainties --saveNormalizations  --setParameters r_s0=1 --rMin -5 --rMax 5 -n final_$year\_DNN_comb_all_VVEWK
+elif [ "$fitr" = "obs" ]; then
+        combine -M FitDiagnostics $carddir/workspace_$year\_DNN_comb_all_VVEWK.root --robustFit=1  --X-rtd MINIMIZER_analytic --saveShapes --saveWithUncertainties --saveNormalizations --rMin -5 --rMax 5 -n obs_$year\_DNN_comb_all_VVEWK --cminDefaultMinimizerStrategy 1 --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --X-rtd MINIMIZER_analytic --cminDefaultMinimizerTolerance=0.5
 else
-	combine -M FitDiagnostics $carddir/workspace_$year\_DNN_comb_CR_VVEWK.root --robustFit=1  --X-rtd MINIMIZER_analytic --saveShapes --saveWithUncertainties --saveNormalizations --rMin 0 --rMax 5 -n final_$year\_DNN_comb_CR_unb_VVEWK --cminDefaultMinimizerStrategy 1 --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --X-rtd MINIMIZER_analytic --cminDefaultMinimizerTolerance=0.5
+	combine -M FitDiagnostics $carddir/workspace_$year\_DNN_comb_CR_VVEWK.root --robustFit=1  --X-rtd MINIMIZER_analytic --saveShapes --saveWithUncertainties --saveNormalizations --rMin 0 --rMax 5 -n obs_$year\_DNN_comb_CR_VVEWK --cminDefaultMinimizerStrategy 1 --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --X-rtd MINIMIZER_analytic --cminDefaultMinimizerTolerance=0.5
 fi;
 ##SR##
 #combine -M FitDiagnostics -t -1 $carddir/workspace_$year\_$var\_$cat\_all_VVEWK.root --robustFit=1  --X-rtd MINIMIZER_analytic --saveShapes --saveWithUncertainties --saveNormalizations  --setParameters r_s0=1 --rMin -5 --rMax 5 -n carddir_$year\_$var\_$cat\_all_VVEWK
