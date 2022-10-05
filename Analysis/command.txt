@@ -15,3 +15,5 @@ python prefit_impact.py   (change datacard name in line 15)
 
 4. run postfit
 root -l -q -b postfitBB.C+'("BB","BDTnoBnoMET","comb")'
+comment: when need data, uncomment "//ddbin->Draw("P e same");" and "//gr->Draw("P e ");"
+root -l -q -b postfitaQGC.C+'("BB","BDTnoBnoMET","aQGC")'
