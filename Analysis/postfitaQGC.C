@@ -48,9 +48,36 @@ void postfitaQGC(TString cat, TString ana, TString pro){
         vector<TDirectoryFile*> cater;
 	vector<TH1D*> cateorg;
 
+
+	//one category, SR only
+
+
 	cater.push_back( (TDirectoryFile*)f1->Get(Form("shapes_fit_s/%s" ,cat.Data())) );
 
         catep.push_back( (TDirectoryFile*)f1->Get(Form("shapes_fit_s/%s" ,cat.Data())) );
+
+	/*
+	// one category, all region
+	cater.push_back( (TDirectoryFile*)f1->Get(Form("shapes_fit_s/ch1",cx)) );
+        catep.push_back( (TDirectoryFile*)f1->Get(Form("shapes_fit_s/ch1",cx)) );
+	*/
+
+
+	/*
+	// all category, all region
+        //chx_chy
+        //x: 1 bb 2 bmet 3 rmet 4 bbtag
+        //y: 1 sr 2 side 3 anti
+        int cx = 0;
+        if (cat == "BB") cx = 1;
+        else if (cat == "BMET") cx = 2;
+        else if (cat == "RMET") cx = 3;
+        else if (cat == "BBtag") cx = 4;
+
+        cater.push_back( (TDirectoryFile*)f1->Get(Form("shapes_fit_s/ch%i_ch1",cx)) );
+        catep.push_back( (TDirectoryFile*)f1->Get(Form("shapes_fit_s/ch%i_ch1",cx)) );
+	*/
+
 
         //cater.push_back( (TDirectoryFile*)f1->Get(Form("shapes_prefit/%s" ,cat.Data())) );
 
